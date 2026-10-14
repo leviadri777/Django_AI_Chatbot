@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My AI Chatbot</title>
+
+    <!-- Bootstrap CSS -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+    <style>
+        body {
+            background: #f4f7fb;
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: linear-gradient(135deg, #4338ca, #6366f1);
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .chat-container {
+            max-width: 900px;
+            margin: 40px auto;
+        }
+
+        .chat-card {
+            border: none;
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        .chat-header {
+            background: white;
+            padding: 25px;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .bot-icon {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #eef2ff;
+            border-radius: 15px;
+            font-size: 27px;
+        }
+
+        .chat-body {
+            padding: 28px;
+            background: #ffffff;
+            min-height: 300px;
+        }
+
+        .message-label {
+            font-size: 13px;
+            font-weight: 700;
+            color: #6366f1;
+            margin-bottom: 8px;
+        }
+
+        .question-box {
+            background: #eef2ff;
+            padding: 15px 18px;
+            border-radius: 14px;
+            margin-bottom: 25px;
+            overflow-wrap: anywhere;
+        }
+
+        .answer-box {
+            line-height: 1.8;
+            color: #343a40;
+            overflow-wrap: anywhere;
+        }
+
+        .answer-box h1,
+        .answer-box h2,
+        .answer-box h3,
+        .answer-box h4 {
+            color: #252b42;
+            margin-top: 24px;
+            margin-bottom: 12px;
+        }
+
+        .answer-box pre {
+            background: #1e293b;
+            color: #f8fafc;
+            padding: 18px;
+            border-radius: 12px;
+            overflow-x: auto;
+        }
+
+        .answer-box code {
+            color: #7c3aed;
+            background: #f3f0ff;
+            padding: 2px 5px;
+            border-radius: 4px;
+        }
+
+        .answer-box pre code {
+            color: inherit;
+            background: transparent;
+            padding: 0;
+        }
+
+        .answer-box blockquote {
+            border-left: 4px solid #6366f1;
+            padding-left: 15px;
+            color: #6c757d;
+        }
+
+        .chat-footer {
+            background: #f8fafc;
+            padding: 22px;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .question-input {
+            border-radius: 12px;
+            padding: 13px 16px;
+            border: 1px solid #dbe1ea;
+        }
+
+        .question-input:focus {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 0.2rem rgba(99, 102, 241, 0.15);
+        }
+
+        .send-btn {
+            background: #4f46e5;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 12px 24px;
+            font-weight: 600;
+        }
+
+        .send-btn:hover {
+            background: #4338ca;
+            color: white;
+        }
+
+        .welcome-message {
+            text-align: center;
+            padding: 45px 15px;
+            color: #6c757d;
+        }
+
+        .error-box {
+            background: #fff1f2;
+            color: #be123c;
+            padding: 15px;
+            border-radius: 10px;
+            overflow-wrap: anywhere;
+        }
+
+        .footer-text {
+            color: #94a3b8;
+            font-size: 12px;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 576px) {
+            .chat-container {
+                margin: 20px 12px;
+            }
+
+            .chat-header,
+            .chat-body {
+                padding: 20px;
+            }
+
+            .chat-footer {
+                padding: 15px;
+            }
+
+            .send-btn {
+                padding: 12px 16px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                🤖 My AI Chatbot
+            </a>
+
+            <span class="text-white small">
+                Powered by Gemini AI
+            </span>
+        </div>
+    </nav>
+
+    <!-- Main Chat Container -->
+    <main class="container chat-container">
+
+        <div class="card chat-card">
+
+            <!-- Chat Header -->
+            <div class="chat-header">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="bot-icon">🤖</div>
+
+                    <div>
+                        <h4 class="mb-1">AI Assistant</h4>
+                        <p class="text-secondary mb-0 small">
+                            Ask questions and learn something new
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat Body -->
+            <div class="chat-body">
+
+                {% if question %}
+                    <div class="message-label">YOU ASKED</div>
+
+                    <div class="question-box">
+                        {{ question }}
+                    </div>
+                {% endif %}
+
+                {% if answer %}
+                    <div class="message-label">
+                        <span class="me-1">🤖</span> AI RESPONSE
+                    </div>
+
+                    <div class="answer-box">
+                        {{ answer|safe }}
+                    </div>
+
+                {% elif not question and not error %}
+                    <div class="welcome-message">
+                        <div class="display-4 mb-3">✨</div>
+
+                        <h4>Hello! How can I help you?</h4>
+
+                        <p class="mb-0">
+                            Ask me about Python, Django, AI, or anything you want to learn.
+                        </p>
+                    </div>
+                {% endif %}
+
+                {% if error %}
+                    <div class="error-box">
+                        <strong>Something went wrong!</strong>
+                        <p class="mb-0 mt-2">
+                            {{ error }}
+                        </p>
+                    </div>
+                {% endif %}
+
+            </div>
+
+            <!-- Input Form -->
+            <div class="chat-footer">
+                <form method="POST">
+                    {% csrf_token %}
+
+                    <div class="d-flex gap-2">
+                        <input
+                            type="text"
+                            name="question"
+                            class="form-control question-input"
+                            placeholder="Ask your question here..."
+                            autocomplete="off"
+                            required
+                        >
+
+                        <button type="submit" class="btn send-btn">
+                            Send ➤
+                        </button>
+                    </div>
+                </form>
+
+                <p class="footer-text mb-0">
+                    AI can make mistakes. Verify important information.
+                </p>
+            </div>
+
+        </div>
+
+    </main>
+
+</body>
+</html>
